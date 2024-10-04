@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     callback = function()
         vim.highlight.on_yank {
             higroup = 'Visual',
-            timeout = 150,
+            timeout = 250,
             on_visual = false
         }
     end,
@@ -34,38 +34,19 @@ vim.api.nvim_create_autocmd('VimResized', {
     })
 })
 
--- rust utilities
-vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'rust',
-    callback = function (ev)
-        local map = vim.keymap.set
-        local opts = { buffer = ev.buf }
-
-        -- run tests
-        map('n', '<Leader>rt', function ()
-            -- vim.cmd.vsplit()
-            vim.cmd.terminal()
-            vim.api.nvim_chan_send(vim.bo.channel, "cargo nextest run\n")
-        end, opts)
-
-        vim.api.nvim_buf_create_user_command( ev.buf,
-            'Bacon',
-            function ()
-                vim.cmd.split()
-                vim.cmd.terminal()
-                vim.api.nvim_chan_send(vim.bo.channel, "bacon\n")
-            end,
-            { nargs = 0 }
-        )
-
-        vim.api.nvim_buf_create_user_command( ev.buf,
-            'BaconTest',
-            function ()
-                vim.cmd.split()
-                vim.cmd.terminal()
-                vim.api.nvim_chan_send(vim.bo.channel, "bacon test\n")
-            end,
-            { nargs = 0 }
-        )
-    end
+-- notify when recording macros
+local recording_group = vim.api.nvim_create_augroup('NotifyRecording', {
+    clear = true
+})
+vim.api.nvim_create_autocmd('RecordingEnter', {
+    callback = function ()
+        vim.notify("Recording @" .. vim.fn.reg_recording())
+    end,
+    group = recording_group
+})
+vim.api.nvim_create_autocmd('RecordingLeave', {
+    callback = function ()
+        vim.notify("Stoped recording @" .. vim.fn.reg_recording())
+    end,
+    group = recording_group
 })

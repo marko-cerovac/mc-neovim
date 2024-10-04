@@ -14,6 +14,7 @@ dap.adapters.gdb = {
     args = { '-i', 'dap' }
 }
 
+-- C#
 dap.adapters.coreclr = {
     type = 'executable',
     -- command = '/path/to/dotnet/netcoredbg/netcoredbg',

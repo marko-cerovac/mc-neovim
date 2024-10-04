@@ -7,10 +7,6 @@ local neovim_settings = function()
     }
 end
 
-local browse_folders = function ()
-    require 'telescope'.extensions.file_browser.file_browser({ files = false })
-end
-
 return {
     {
         'nvim-telescope/telescope.nvim',
@@ -18,13 +14,7 @@ return {
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-fzy-native.nvim',
         },
-        -- cmd = 'Telescope',
         keys = {
-            -- 'gd',
-            -- 'gD',
-            -- 'gi',
-            -- 'gr',
-            -- { '<Leader>cd', }
             '<Leader>ca',
             { 'gr', function() return require 'telescope.builtin'.lsp_references() end, keymap_opts },
             { '<Leader>fc', function() return require 'telescope.builtin'.lsp_document_symbols() end, keymap_opts },
@@ -37,6 +27,7 @@ return {
             { '<Leader>fr', function() return require 'telescope.builtin'.oldfiles() end, keymap_opts },
             { '<Leader>ft', function() return require 'telescope.builtin'.colorscheme() end, keymap_opts },
             { '<Leader>fh', function() return require 'telescope.builtin'.help_tags() end, keymap_opts },
+            { '<Leader>fm', function() return require 'telescope.builtin'.marks() end, keymap_opts },
         },
         config = function()
             local telescope = require 'telescope'
@@ -72,7 +63,8 @@ return {
                             },
                         },
                     },
-                    commands = { theme = 'dropdown' },
+                    commans = { theme = 'dropdown' },
+                    marks = { theme = 'dropdown' },
                     colorscheme = { theme = 'dropdown' },
                     lsp_references = { theme = 'cursor' },
                 },
@@ -85,8 +77,7 @@ return {
                     },
                     ['import'] = {
                         theme = themes.get_dropdown
-                    }
-                }
+                    } }
             }
 
             -- load extensions
@@ -95,6 +86,7 @@ return {
     },
     {
         'nvim-telescope/telescope-file-browser.nvim',
+        lazy = true,
         dependencies = {
             'nvim-telescope/telescope.nvim',
             {
@@ -102,15 +94,11 @@ return {
                 config = true
             },
         },
-        cmd = {
-            'Telescope'
-        },
         keys = {
             { '<Leader>e', function()
                 return require 'telescope'.extensions.file_browser.file_browser()
             end, keymap_opts
             },
-            { '<Leader>fj', browse_folders, keymap_opts },
         },
         config = function()
             require 'telescope'.load_extension 'file_browser'
@@ -118,8 +106,8 @@ return {
     },
     {
         'jvgrootveld/telescope-zoxide',
+        lazy = true,
         dependencies = {
-            -- 'nvim-lua/popup.nvim',
             'nvim-telescope/telescope.nvim',
             'nvim-telescope/telescope-file-browser.nvim',
         },

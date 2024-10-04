@@ -2,11 +2,6 @@
 -- author: Marko Cerovac
 -- repo:   https://github.com/marko-cerovac/nvim
 
-if vim.g.vscode then
-	require 'user.util.vscode'
-	return
-end
-
 require 'user.core.options'
 
 require 'user.core.mappings'

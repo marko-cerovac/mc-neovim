@@ -18,10 +18,10 @@ return {
                         info = ' ',
                         hint = ' ',
                     },
-                    always_visible = true }
+                    always_visible = true },
                 },
                 lualine_x = { 'filename', 'encoding', 'fileformat', 'filetype' },
-                lualine_y = { 'progress', 'searchcount', 'selectioncount' },
+                lualine_y = { 'progress', 'searchcount', 'selectioncount', },
                 lualine_z = { 'location' },
             }
         },
@@ -29,42 +29,26 @@ return {
     {
         'lewis6991/gitsigns.nvim',
         event = 'VeryLazy',
-        -- event = {
-        --     'BufReadPre',
-        --     'BufNewFile',
-        -- },
         config = function()
             require('gitsigns').setup {
                 signs = {
                     add = {
-                        hl = 'GitSignsAdd',
-                        text = '▎',
-                        linehl = 'GitSignsAddLn'
+                        text = '▍',
                     },
                     change = {
-                        hl = 'GitSignsChange',
-                        text = '▎',
-                        linehl = 'GitSignsChangeLn'
+                        text = '▍',
                     },
                     delete = {
-                        hl = 'GitSignsDelete',
-                        text = '_',
-                        linehl = 'GitSignsDeleteLn'
+                        text = '',
                     },
                     topdelete = {
-                        hl = 'GitSignsDelete',
-                        text = '‾', -- 
-                        linehl = 'GitSignsDeleteLn'
+                        text = '',
                     },
                     changedelete = {
-                        hl = 'GitSignsChange',
-                        text = '▎',
-                        linehl = 'GitSignsChangeLn'
+                        text = '▍',
                     },
                     untracked = {
-                        hl = 'GitSignsAdd',
-                        text = '▎',
-                        linehl = 'GitSignsAddLn'
+                        text = '▍',
                     },
                 },
                 preview_config = { border = vim.g.border_style },
@@ -114,7 +98,6 @@ return {
         event = 'VeryLazy',
         opts = {
             input = {
-                -- default_prompt = 'Input:'
                 title_pos = 'center',
                 border = vim.g.border_style,
                 win_options = {
@@ -134,24 +117,52 @@ return {
                 }
             }
         }
-    }
-    --[[ {
-        'folke/noice.nvim',
-        event = {
-            'CmdLineEnter',
-            'InsertEnter',
+    },
+    {
+        'rcarriga/nvim-notify',
+        event = 'VeryLazy',
+        keys = {
+            {'<leader>nd', function() require('notify').dismiss({silent = true, pending = true}) end}
         },
-        dependencies = { 'MunifTanjim/nui.nvim' },
+        opts = {
+            stages = 'slide'
+            -- stages = 'fade'
+            -- stages = 'static'
+        }
+    },
+    {
+        'folke/noice.nvim',
+        event = 'VeryLazy',
+        dependencies = {
+            'MunifTanjim/nui.nvim',
+            'rcarriga/nvim-notify',
+        },
         opts = {
             lsp = {
+                progress = {
+
+                },
                 override = {
                     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
                     ['vim.lsp.util.stylize_markdown'] = true,
                     ['cmp.entry.get_documentation'] = true,
                 },
                 signature = {
-                    enabled = false,
+                    enabled = true,
                 }
+            },
+            format = {
+                cmdline = { pattern = '^:', icon = '', lang = 'vim' },
+                -- cmdline = { pattern = '^:', icon = '', lang = 'vim' },
+                search_down = { kind = 'search', pattern = '^/', icon = ' ', lang = 'regex' },
+                search_up = { kind = 'search', pattern = '^%?', icon = ' ', lang = 'regex' },
+                filter = { pattern = '^:%s*!', icon = '', lang = 'bash' },
+                lua = { pattern = { '^:%s*lua%s+', '^:%s*lua%s*=%s*', '^:%s*=%s*' }, icon = '', lang = 'lua' },
+                help = { pattern = '^:%s*he?l?p?%s+', icon = '' },
+                input = {}, -- Used by input()
+            },
+            popupmenu = {
+                backend = 'cmp'
             },
             presets = {
                 bottom_search = false,
@@ -172,15 +183,34 @@ return {
                 },
                 mini = {
                     timeout = 5000,
+                    -- border = {
+                    --     style = vim.g.border_style
+                    -- },
                     position = {
-                        row = '0%',
+                        row = -2,
                         col = '100%',
-                    },
+                    }
+                },
+                hover = {
                     border = {
                         style = vim.g.border_style
+                    },
+                    position = {
+                        row = 2,
+                        col = 0,
                     }
+                }
+            },
+            routes = {
+                {
+                    view = 'mini',
+                    filter = { event = 'msg_show', kind = '' }
+                },
+                {
+                    view = 'mini',
+                    filter = { event = 'msg_show', kind = 'confirm_sub' }
                 }
             }
         }
-    }, --]]
+    },
 }

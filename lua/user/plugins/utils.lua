@@ -27,7 +27,7 @@ return {
             { '<M-[>', function() require 'harpoon':list():prev() end, keymap_opts },
         },
         config = function ()
-           require 'harpoon':setup()
+            require 'harpoon':setup()
         end
     },
     {
@@ -43,79 +43,121 @@ return {
         cmd = 'ColorizerToggle'
     },
     {
-        'nvim-neorg/neorg',
-        ft = 'norg',
-        build = ':Neorg sync-parsers',
-        config = function ()
-           require 'neorg'.setup {
-                load = {
-                    ['core.defaults'] = {},
-                    ['core.concealer'] = {
-                        config = {
-                            icon_preset = 'basic',
-                            -- icon_preset = 'varied'
-                            -- icon_preset = 'diamond'
-                            icons = {
-                                todo = {
-                                    urgent = {
-                                        icon = ''
-                                    }
-                                }
+        'epwalsh/obsidian.nvim',
+        version = '*',
+        lazy = true,
+        ft = 'markdown',
+        cmd = {
+            'ObsidianOpen',
+            'ObsidianNew',
+            'ObsidianQuickSwitch',
+        },
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'hrsh7th/nvim-cmp',
+            'nvim-telescope/telescope.nvim',
+            'nvim-treesitter/nvim-treesitter',
+        },
+        opts = {
+            workspaces = {
+                {
+                    name = 'personal',
+                    path = '~/Vaults/Life'
+                },
+            },
 
-                            }
-                        }
-                    },
-                    ['core.completion'] = {
-                        config = {
-                            engine = 'nvim-cmp',
-                            name = 'neorg',
-                        }
-                    },
-                    ['core.keybinds'] = {
-                        config = {
-                            hook = function (keybinds)
-                                keybinds.map(
-                                    'norg',
-                                    'n',
-                                    keybinds.leader .. 'mc',
-                                    "<cmd>Neorg keybind all core.looking-glass.magnify-code-block<CR>"
-                                )
-                            end
-                        }
+            log_level = vim.log.levels.INFO,
 
-                    },
-                    ['core.dirman'] = {
-                        config = {
-                            workspaces = {
-                                notes = '~/Documents/neorg/notes',
-                                school = '~/Documents/neorg/school',
-                                system = '~/Documents/neorg/system'
-                            },
-                            default_workspace = "notes"
-                        }
-                    },
-                    ['core.pivot'] = {},
-                    ['core.promo'] = {},
-                    ['core.itero'] = {},
-                    ['core.looking-glass'] = {},
-                    ['core.qol.toc'] = {},
-                    ['core.qol.todo_items'] = {},
-                }
+            daily_notes = {
+                folder = 'Journal/Daily',
+                date_format = '%Y-%m-%d',
+                template = 'Templates/daily-journal-template'
+            },
+
+            completion = {
+                nvim_cmp = true
+            },
+            templates = {
+                subdir = 'Templates',
+                date_format = '%Y-%m-%d',
+                time_format = '%H:%M',
+            },
+            mappings = {
+                ['gf'] = {
+                    action = function()
+                        return require('obsidian').util.gf_passthrough()
+                    end,
+                    opts = { noremap = false, expr = true, buffer = true },
+                },
+                ['<m-Enter>'] = {
+                    action = function()
+                        return require('obsidian').util.gf_passthrough()
+                    end,
+                    opts = { noremap = false, expr = true, buffer = true },
+                },
+                ['<c-Space>'] = {
+                    action = function()
+                        return require('obsidian').util.toggle_checkbox()
+                    end,
+                    opts = { buffer = true },
+                },
+            },
+
+            picker = {
+                name = 'telescope.nvim',
+                mappings = {
+                    new = '<S-Enter>',
+                    insert_link = '<C-l>',
+                },
+            },
+            ui = {
+                enable = true,
             }
-        end,
 
+        },
+    },
+    {
+        'folke/trouble.nvim',
+        opts = {
+            auto_jump = true
+        },
+        cmd = 'Trouble',
+        keys = {
+            {
+                'gd',
+                '<cmd>Trouble lsp_definitions<cr>',
+                desc = 'Jump to definition (Trouble)'
+            },
+            {
+                'gr',
+                '<cmd>Trouble lsp_references<cr>',
+                desc = 'Jump to references (Trouble)'
+            },
+            {
+                'gi',
+                '<cmd>Trouble lsp_implementations<cr>',
+                desc = 'Jump to implementations (Trouble)'
+            },
+            {
+                '<leader>cd',
+                '<cmd>Trouble diagnostics toggle<cr>',
+                desc = 'Diagnostics (Trouble)',
+            },
+            {
+                '<leader>cb',
+                '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+                desc = 'Buffer Diagnostics (Trouble)',
+            },
+            {
+                '<leader>cs',
+                '<cmd>Trouble symbols toggle focus=false<cr>',
+                desc = 'Symbols (Trouble)',
+            },
+            {
+                '<leader>cc',
+                '<cmd>Trouble lsp toggle focus=true win.position=right<cr>',
+                desc = 'LSP Definitions / references / ... (Trouble)',
+            },
+        },
     }
-    -- {
-    --     "folke/flash.nvim",
-    --     event = "VeryLazy",
-    --     opts = {},
-    --     -- stylua: ignore
-    --     keys = {
-    --         { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-    --         { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-    --         { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-    --         { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-    --         { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-    --     },
-    -- }
 }

@@ -1,36 +1,41 @@
 local o = vim.opt
 
+-- file
+o.confirm = true
 o.swapfile = false
 o.writebackup = false
-o.autochdir = true
-o.clipboard = 'unnamedplus'
-o.grepprg = 'rg --vimgrep'
+o.autoread = true
+
+-- formating
 o.expandtab = true
 o.tabstop = 4
 o.shiftwidth = 4
 o.smartindent = true
+o.breakindent = false
 o.smartcase = true
-o.conceallevel = 2
-o.signcolumn = 'yes'
-o.number = true
-o.relativenumber = true
-o.scrolloff = 5
-o.sidescrolloff = 10
-o.wrap = false
-o.cursorline = true
-o.laststatus = 3
-o.cmdheight = 0
+
+-- window
 o.splitright = true
 o.splitbelow = true
-o.updatetime = 250
-o.timeoutlen = 1000
+o.scrolloff = 5
+o.sidescrolloff = 10
+
+-- ui
+o.number = true
+o.relativenumber = true
+o.cursorline = true
+o.wrap = false
+o.signcolumn = 'yes'
+o.laststatus = 3
+o.cmdheight = 0
+o.conceallevel = 2
 o.showmode = false
-o.mouse = 'a'
+vim.g.border_style = 'rounded'
+
+-- folding
 o.foldenable = false
 o.foldmethod = 'expr'
-o.shortmess:append({c = true, C = true})
 o.listchars = "tab:→ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:N"
-
 o.fillchars = {
   foldopen = '',
   foldclose = '',
@@ -40,4 +45,19 @@ o.fillchars = {
   eob = ' ',
 }
 
-vim.g.border_style = 'rounded'
+-- misc
+o.mouse = 'a'
+o.autochdir = true
+o.clipboard = 'unnamedplus'
+o.grepprg = 'rg --vimgrep'
+o.updatetime = 250
+o.timeoutlen = 1000
+o.shortmess:append({c = true, C = true})
+
+-- add hyprlang filetype
+vim.filetype.add {
+    pattern = {
+        ['.*/hyprland%.conf'] = 'hyprlang',
+        ['${XDG_CONFIG_HOME}/hypr/.*%.conf'] = 'hyprlang'
+    }
+}

@@ -30,7 +30,7 @@ require("lazy").setup("user.plugins", {
                 "netrwPlugin",
                 "netrwSettings",
                 "netrwFileHandlers",
-                "matchit",
+                -- "matchit",
                 -- "matchparen",
                 "tar",
                 "tarPlugin",

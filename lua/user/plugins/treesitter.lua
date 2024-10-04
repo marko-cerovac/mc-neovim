@@ -11,7 +11,19 @@ return {
         },
         config = function()
             require 'nvim-treesitter.configs'.setup {
-                ensure_installed = { 'c', 'cpp', 'rust', 'java', 'vim', 'lua', 'bash', 'norg' },
+                ensure_installed = {
+                    'c',
+                    'cpp',
+                    'rust',
+                    'java',
+                    'vim',
+                    'lua',
+                    'bash',
+                    'toml',
+                    'norg',
+                    'markdown',
+                    'markdown_inline',
+                },
                 sync_install = false,
                 highlight = { enable = true },
                 incremental_selection = { enable = false },

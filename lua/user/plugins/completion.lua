@@ -112,6 +112,9 @@ return {
                     completion = cmp.config.window.bordered {
                         border = vim.g.border_style,
                         winhighlight = 'Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+                        col_offset = -3,
+                        side_padding = 0,
+                        scrollbar = false,
                     },
                     documentation = cmp.config.window.bordered {
                         border = vim.g.border_style,
@@ -119,21 +122,15 @@ return {
                     },
                 },
                 formatting = {
-                    format = function(entry, vim_item)
-                        -- load lspkind icons
-                        vim_item.kind = string.format(' %s  %s ', icons[vim_item.kind], vim_item.kind)
-                        vim_item.menu = ({
-                            nvim_lsp = '( lsp)',
-                            nvim_lua = '( nvim)',
-                            treesitter = '(滑 ts)',
-                            buffer = '(﬘ buff)',
-                            calc = '( calc)',
-                            luasnip = '( snip)',
-                            path = '( path)',
-                            neorg = '(לּ org)',
-                        })[entry.source.name]
+                    fields = { 'kind', 'abbr', 'menu' },
+                    format = function(_, item)
+                        local kind = item.kind
+                        item.kind = string.format(' %s ', icons[item.kind])
+                        -- item.kind = string.format(' %s  %s ', icons[item.kind], item.kind)
+                        item.menu = kind
+                        item.abbr = string.format('%s ', item.abbr)
 
-                        return vim_item
+                        return item
                     end,
                 },
                 experimental = {
@@ -154,26 +151,26 @@ return {
                         behavior = cmp.ConfirmBehavior.Replace,
                         select = false,
                     },
-                    ['<Tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        elseif has_words_before() then
-                            cmp.complete()
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
-                    ['<S-Tab>'] = cmp.mapping(function(fallback)
-                        if cmp.visible() then
-                            cmp.select_prev_item()
-                        elseif luasnip.jumpable(-1) then
-                            luasnip.jump(-1)
-                        else
-                            fallback()
-                        end
-                    end, { 'i', 's' }),
+                    -- ['<Tab>'] = cmp.mapping(function(fallback)
+                    --     if cmp.visible() then
+                    --         cmp.select_next_item()
+                    --     elseif luasnip.expand_or_jumpable() then
+                    --         luasnip.expand_or_jump()
+                    --     elseif has_words_before() then
+                    --         cmp.complete()
+                    --     else
+                    --         fallback()
+                    --     end
+                    -- end, { 'i', 's' }),
+                    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+                    --     if cmp.visible() then
+                    --         cmp.select_prev_item()
+                    --     elseif luasnip.jumpable(-1) then
+                    --         luasnip.jump(-1)
+                    --     else
+                    --         fallback()
+                    --     end
+                    -- end, { 'i', 's' }),
                 },
                 sources = {
                     { name = 'nvim_lua' },

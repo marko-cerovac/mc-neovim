@@ -44,18 +44,6 @@ return {
             dap.listeners.after['event_initialized']['me'] = function()
                 local dapui = require 'dapui'
 
-                -- save previous 'K' mapping
-                -- for _, buf in pairs(vim.api.nvim_list_bufs()) do
-                --     local keymaps = vim.api.nvim_buf_get_keymap(buf, 'n')
-                --     for _, keymap in pairs(keymaps) do
-                --         if keymap.lhs == "K" then
-                --             table.insert(keymap_restore, keymap)
-                --             vim.keymap.del('n', 'K', { buffer = buf })
-                --         end
-                --     end
-                -- end
-
-                -- map({ 'n', 'v' }, 'K', dapui.eval, opts)
                 map({ 'n', 'v' }, 'ge', dapui.eval, opts)
                 map('n', 'C', dap.continue, opts)
                 map('n', 'H', dap.step_out, opts)
@@ -73,15 +61,6 @@ return {
                     dapui.toggle(1)
                     dapui.toggle(2)
                 end, opts)
-                map('n', '<Leader>dr', function()
-                    dapui.toggle(4)
-                end, opts)
-                map('n', '<Leader>dR', function() -- temporary mapping
-                    dapui.toggle(5)
-                end, opts)
-                map('n', '<Leader>dc', function()
-                    dapui.float_element('console', { enter = true })
-                end, opts)
                 map('n', '<M-c>', function()
                     dapui.toggle(3)
                 end, opts)
@@ -94,25 +73,34 @@ return {
                 map('n', '<Leader>dS', function()
                     dapui.float_element('scopes', { enter = true })
                 end, opts)
+
+                vim.api.nvim_create_user_command(
+                    'DapConsole',
+                    function ()
+                        dapui.toggle(3)
+                    end,
+                    { nargs = 0 }
+                )
+
+                vim.api.nvim_create_user_command(
+                    'DapWatch',
+                    function ()
+                        dapui.toggle(5)
+                    end,
+                    { nargs = 0 }
+                )
+
+                vim.api.nvim_create_user_command(
+                    'DapRepl',
+                    function ()
+                        dapui.toggle(4)
+                    end,
+                    { nargs = 0 }
+                )
             end
 
             dap.listeners.before['disconnect']['me'] = function()
-                require 'dapui'.close()
-
-                -- return 'K' to it's original mapping
-                -- for _, keymap in pairs(keymap_restore) do
-                --     vim.keymap.set(
-                --         keymap.mode,
-                --         keymap.lhs,
-                --         keymap.rhs,
-                --         {
-                --             buffer = keymap.buffer,
-                --             silent = keymap.silent == true
-                --
-                --         }
-                --     )
-                -- end
-                -- keymap_restore = {}
+                require 'dapui'.close({1, 2, 3, 4, 5})
 
                 map('n', '<Leader>dd', dap.continue, opts)
                 unmap('n', '<Up>')
@@ -125,20 +113,24 @@ return {
                 unmap('n', 'L')
                 unmap('n', '<M-c>')
                 unmap('n', '<Leader>dq')
-                unmap('n', '<Leader>dr')
-                unmap('n', '<Leader>dR')
-                unmap('n', '<Leader>dc')
                 unmap('n', '<Leader>dw')
                 unmap('n', '<Leader>ds')
                 unmap('n', '<Leader>dS')
                 unmap('n', 'ge')
                 unmap('v', 'ge')
+
+                vim.api.nvim_del_user_command('DapConsole')
+                vim.api.nvim_del_user_command('DapWatch')
+                vim.api.nvim_del_user_command('DapRepl')
             end
         end
-
     },
     {
         'rcarriga/nvim-dap-ui',
+        dependencies = {
+            'mfussenegger/nvim-dap',
+            'nvim-neotest/nvim-nio',
+        },
         lazy = true,
         opts = {
             mappings = {
@@ -159,7 +151,7 @@ return {
                         'watches',
                     },
                     size = 40,
-                    position = 'right',
+                    position = 'left',
                 },
                 {
                     elements = {
@@ -174,7 +166,7 @@ return {
                         'console',
                     },
                     size = 0.40,
-                    position = 'right',
+                    position = 'bottom',
                 },
                 {
                     elements = {
@@ -185,11 +177,11 @@ return {
                 },
                 {
                     elements = {
-                        'scopes'
+                        'watches',
                     },
-                    size = 0.25,
+                    size = 40,
                     position = 'right',
-                }
+                },
             },
             floating = {
                 border = vim.g.border_style,
@@ -206,7 +198,9 @@ return {
     {
         'theHamsta/nvim-dap-virtual-text',
         lazy = true,
-        config = true
+        opts = {
+            enabled = false
+        }
     },
     {
         'LiadOz/nvim-dap-repl-highlights',
