@@ -12,7 +12,6 @@ o.tabstop = 4
 o.shiftwidth = 4
 o.smartindent = true
 o.breakindent = false
-o.smartcase = true
 
 -- window
 o.splitright = true
@@ -47,7 +46,9 @@ o.fillchars = {
 
 -- misc
 o.mouse = 'a'
+-- o.shell = '/bin/nu'
 o.autochdir = true
+o.smartcase = true
 o.clipboard = 'unnamedplus'
 o.grepprg = 'rg --vimgrep'
 o.updatetime = 250

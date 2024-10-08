@@ -42,47 +42,4 @@ return {
             vim.cmd 'colorscheme material'
         end
     },
-    {
-        'folke/tokyonight.nvim',
-        lazy = true,
-        config = function()
-            require('tokyonight').setup {
-                style = 'night',
-                -- style = 'moon',
-                styles = {
-                    comments = { italic = true },
-                    functions = { italic = true },
-                    floats = "normal"
-                },
-
-            }
-
-            -- vim.cmd 'colorscheme tokyonight'
-        end,
-    },
-    {
-        'navarasu/onedark.nvim',
-        lazy = true,
-        config = function ()
-            require 'onedark'.setup {
-                style = 'deep',
-                -- dark
-                -- darker
-                -- cool
-                -- deep
-                -- warm
-                -- warmer
-                code_style = {
-                    comments = 'italic',
-                    functions = 'italic',
-                }
-            }
-        end
-    },
-    {
-        'Everblush/nvim',
-        lazy = true,
-        name = 'everblush',
-        opts = {}
-    }
 }
